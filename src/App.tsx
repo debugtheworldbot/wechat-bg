@@ -1,10 +1,14 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
+
+
+
 
 export default function App() {
     const [tag, setTag] = useState<string[]>([])
     const [content,setContent]=useState<string>('')
     const [urls, setUrl] = useState<string[]>([])
     const [link,setLink]=useState<string>('')
+
 
     const arr=[
         {name: "扫码",
@@ -41,7 +45,21 @@ export default function App() {
             name: '帮助',
             url: 'https://baidu.com'
         }]
-
+    const request=new Request(JSON.stringify(arr))
+    fetch(request)
+        .then(response => {
+            if (response.status === 200) {
+                console.log('success')
+            } else {
+                throw new Error('Something went wrong on api server!');
+            }
+        })
+        .then(data => {
+            console.log(data)
+            // ...
+        }).catch(error => {
+        console.error(error);
+    });
 
     function show(title: string) {
         setContent(title)
@@ -55,7 +73,7 @@ export default function App() {
         }
         if(text[0].url){
             setLink(text[0].url)
-            // window.open(text[0].url)
+            window.open(text[0].url)
         }else {
             setLink('')
         }
@@ -65,7 +83,7 @@ export default function App() {
         setContent(item)
         let index = tag.indexOf(item)
         setLink(urls[index])
-        // window.open(url[index])
+        window.open(urls[index])
     }
 
     function autoResponse(type: 'subscribe' | 'message') {
@@ -76,41 +94,53 @@ export default function App() {
             console.log(`we've received your message!`)
         }
     }
-    function changeContent(content:string) {
-        const text= arr.filter(item=>item.name===content)
-        if(text){
-          //const lll= arr.findIndex(item=>item.name===text[0].name)
-            const edit=window.prompt('请输入修改内容:')
-            if(edit){
-                arr[1].name=edit
-                setContent(arr[1].name)
-            }
-        }
-    }
-    function changeLink(link:string) {
-        console.log(link)
-    }
-    const title= arr.map(item => <li onClick={() => show(item.name)}>{item.name}</li>)
-    const list = tag.map(item => <li onClick={() => goToLink(item)}>{item}</li>)
+    // function changeContent(content:string) {
+    //     const text= arr.filter(item=>item.name===content)
+    //     console.log(text)
+    //     if(text){
+    //       const lll= arr.findIndex(item=>item.name===text[0].name)
+    //         const edit=window.prompt('请输入修改内容:')
+    //         if(edit){
+    //             arr[lll].name=edit
+    //             setContent(arr[1].name)
+    //             console.log(arr)
+    //         }
+    //     }
+    // }
+    // function changeLink(link:string) {
+    //     console.log(link)
+    // }
+    // function addList() {
+    //     const text=window.prompt('输入添加的内容')
+    //     if(text){
+    //         let tep=JSON.parse(JSON.stringify(arr[0]))
+    //         tep.name=text
+    //         tep.sub_button=[]
+    //         arr.push(tep)
+    //
+    //     }
+    // }
+
+    const title=arr.map(item => <li key={item.name} onClick={() => show(item.name)}>{item.name}</li>)
+    const list = tag.map(item => <li key={item} onClick={() => goToLink(item)}>{item}</li>)
 
     return (
         <div className="App">
             <div>
                 <ul>{title}</ul>
                 <ul>
-                  {list}
-                  <li>+</li>
+                    {list}
                 </ul>
             </div>
             <div>
                 <button onClick={() => autoResponse('subscribe')}>订阅</button>
                 <button onClick={() => autoResponse('message')}>发消息</button>
             </div>
-            <div>
-              编辑
-                <div onClick={()=>changeContent(content)}>{content}</div>
-                <div onClick={()=>changeLink(link)}>{link}</div>
-            </div>
+            {/*<div>*/}
+            {/*    编辑*/}
+            {/*    <div onClick={()=>changeContent(content)}>{content}</div>*/}
+            {/*    <div onClick={()=>changeLink(link)}>{link}</div>*/}
+            {/*</div>*/}
 
         </div>
     );

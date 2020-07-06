@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "noImplicitAny": false,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,6 +20,10 @@
     "noEmit": true,
     "jsx": "react"
   },
+  "typeRoots": [
+    "../node_modules/@types",
+    "../@types"
+  ],
   "include": [
     "src"
   ]
