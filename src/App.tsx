@@ -10,7 +10,7 @@ export default function App() {
     const [link,setLink]=useState<string>('')
 
 
-    const arr=[
+    const arr={buttons:[
         {name: "扫码",
         sub_button: [
             {
@@ -44,27 +44,37 @@ export default function App() {
             ]},{
             name: '帮助',
             url: 'https://baidu.com'
-        }]
-    const request=new Request(JSON.stringify(arr))
-    fetch(request)
-        .then(response => {
-            if (response.status === 200) {
-                console.log('success')
-            } else {
-                throw new Error('Something went wrong on api server!');
-            }
-        })
-        .then(data => {
-            console.log(data)
-            // ...
-        }).catch(error => {
-        console.error(error);
-    });
+        }]}
+
+
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    let raw = JSON.stringify(arr);
+    fetch("http://127.0.0.1:7001/wechat", {method:'POST',headers:myHeaders,body:raw})
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+
+    // fetch(request)
+    //     .then(response => {
+    //         if (response.status === 200) {
+    //             console.log('success')
+    //         } else {
+    //             throw new Error('Something went wrong on api server!');
+    //         }
+    //     })
+    //     .then(data => {
+    //         console.log(data)
+    //         // ...
+    //     }).catch(error => {
+    //     console.error(error);
+    // });
 
     function show(title: string) {
         setContent(title)
         // 获取二级菜单名
-        const text = arr.filter(item => item.name === title)
+        const text = arr.buttons.filter(item => item.name === title)
         const detail = text[0].sub_button
         if (detail) {
             const data = [detail.map(item => item.name), detail.map(item => item.url)]
@@ -121,7 +131,7 @@ export default function App() {
     //     }
     // }
 
-    const title=arr.map(item => <li key={item.name} onClick={() => show(item.name)}>{item.name}</li>)
+    const title=arr.buttons.map(item => <li key={item.name} onClick={() => show(item.name)}>{item.name}</li>)
     const list = tag.map(item => <li key={item} onClick={() => goToLink(item)}>{item}</li>)
 
     return (
