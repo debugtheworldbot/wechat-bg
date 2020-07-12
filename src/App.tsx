@@ -1,22 +1,21 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 
 
-
-const Ul=styled.ul`
+const Ul = styled.ul`
   cursor: pointer;
   font-size: 20px;
 `
 
 
-export default function App(){
+export default function App() {
 
     const [tag, setTag] = useState<string[]>([])
     const [content, setContent] = useState<string>('')
     const [urls, setUrl] = useState<string[]>([])
     const [link, setLink] = useState<string>('')
     const [level1, setLevel1] = useState(-1)
-    const [toggle,setToggle]=useState(false)
+    const [toggle, setToggle] = useState(false)
 
 
     const arr = {
@@ -120,19 +119,22 @@ export default function App(){
         // @ts-ignore
         Arr.buttons[level1].subButtons[index].name = window.prompt('change?') || Arr.buttons[level1].subButtons[index].name
         setArr(Arr)
-        show(Arr.buttons[level1].name,level1)
+        window.alert('success')
+        show(Arr.buttons[level1].name, level1)
     }
-    function changeUrl(url:string,index:number) {
+
+    function changeUrl(url: string, index: number) {
         // @ts-ignore
         Arr.buttons[level1].subButtons[index].url = window.prompt('change?') || Arr.buttons[level1].subButtons[index].url
         setArr(Arr)
-        show(Arr.buttons[level1].name,level1)
+        window.alert('success')
+        show(Arr.buttons[level1].name, level1)
     }
 
-    function addTitle(name:string,link:string) {
-
+    function addTitle(name: string, link: string) {
+        console.log('hi')
         // @ts-ignore
-        setArr({...Arr},{name:name, url: link})
+        setArr({...Arr}, {name: name, url: link})
     }
 
     const title = Arr.buttons.map((item, index) => <li key={item.name}
@@ -140,32 +142,33 @@ export default function App(){
     const list = tag.map((item, index) => <li onClick={() => {
         changeList(item, index)
     }}>{item}</li>)
-    const url=urls.map((url, index) => <li onClick={() => {
+    const url = urls.map((url, index) => <li onClick={() => {
         changeUrl(url, index)
     }}>{url}</li>)
 
 
     return (
+        <div>
             <div>
-                <div>
-                    <Ul>
-                        <h2>主菜单</h2>
-                        {title}
-                        {link}
-                        {/* eslint-disable-next-line no-restricted-globals */}
-                        <div onClick={()=>{addTitle(name,link)}}>{Arr.buttons.length===1?'':`+`}</div>
+                <Ul>
+                    <h2>主菜单</h2>
+                    {title}
+                    {link}
+                    {/* eslint-disable-next-line no-restricted-globals */}
+                    <div onClick={() => {addTitle(name, link)
+                    }}>{Arr.buttons.length === 1 ? '' : `+`}</div>
 
-                    </Ul>
-                    <Ul>
-                        <h1>子菜单</h1>
-                        {list}
-                    </Ul>
-                    <Ul>
+                </Ul>
+                <Ul>
+                    <h1>子菜单</h1>
+                    {list}
+                </Ul>
+                <Ul>
 
-                        {url}
-                    </Ul>
-                </div>
+                    {url}
+                </Ul>
             </div>
+        </div>
     );
 };
 
